@@ -6,45 +6,45 @@
 /*   By: omeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/15 16:09:52 by omeyer            #+#    #+#             */
-/*   Updated: 2017/08/19 15:56:41 by omeyer           ###   ########.fr       */
+/*   Updated: 2017/08/27 17:34:39 by omeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 #include <stdio.h>
 
-void			file_handling(char	*filename)
+int		open_file(char *filename)
 {
-	int		fd;
-	t_node_r    *head;
-	t_graph     *graphs;
-	t_node_g *path;
-	t_node_a	*ants;
-		
-	path = NULL;
-	graphs = NULL;
-	ants = NULL;
+	int fd;
+
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 	{
 		ft_putstr(filename);
 		ft_putstr(" does not exist. Please insert a valid filname\n");
 	}
-	if (break_up(fd, &head, &graphs, &ants) == 1)
-	{
-		ft_putendl("Call the other functions");
-		path_finder(&graphs/*, head*/, &path);
-		ft_putendl("PATH");
-		print_list_g(path);
-		print_list_a(ants);
-	//	ft_putendl("moving the ants");
-		move_ants(&ants, &path, graphs);
-	}
+	return (fd);
+}
+
+void	close_file(int	fd, char *filename)
+{
 	if (close(fd) == -1)
 	{
 		ft_putstr(filename);
 		ft_putstr(" did not close correctly\n");
 	}
+}
+
+void		file_handling(char	*filename)
+{
+	t_node_r    *head;
+	int fd ;
+	fd = open_file(filename);
+	if (break_up(fd, &head) == 1)
+	{
+		
+	}
+	close_file(fd, filename);
 }
 
 static void	create_room(char *line, t_check *check, t_node_r **head)
@@ -91,7 +91,7 @@ t_check		checks(char *line, t_check check, t_node_r **head)
 		check.end = 1;
 	return (check);
 }
-
+/*
 void			create_ants(int ants, t_node_a **head, t_graph *graph)
 {
 	int			i;
@@ -106,39 +106,25 @@ void			create_ants(int ants, t_node_a **head, t_graph *graph)
 		i++;
 	}
 }
-
-int	break_up(int fd, t_node_r **head, t_graph **graphs, t_node_a **head_a)
+*/
+int	break_up(int fd, t_node_r **head)
 {
 	t_check		check;
 	char		*line;
-	char        **split;
-	int			i;
-
+		
 	check.ants = 0;
 	check.start = 0;
 	check.end = 0;
 	check.room = 0;
-	i = 0;
 	while (get_next_line(fd, &line) > 0)
 	{
 		check =	checks(line, check, head);
-		if (ft_strchr(line, '-'))
-		{
-			if (i == 0)
-			{
-				*graphs = graph(check.room);
-				i = 1;
-			}
-			split = ft_strsplit(line, '-');
-		add_edge(*graphs, ft_atoi(split[0]), ft_atoi(split[1]), *head);
-		}
 		free(line);
 	}
-	create_ants(check.ants, head_a, *graphs);
-	return((error_handling(*head, check.ants, check.room) == -1) ? -1 : 1);
+	return((err_handling(*head, check.ants, check.room) == -1) ? -1 : 1);
 }
 
-int		error_handling(t_node_r *head, int ants, int rooms)
+int		err_handling(t_node_r *head, int ants, int rooms)
 {
 	t_node_r	*temp;
 	int			start;

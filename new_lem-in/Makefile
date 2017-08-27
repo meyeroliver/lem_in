@@ -6,19 +6,17 @@
 #    By: omeyer <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/07/02 14:51:42 by omeyer            #+#    #+#              #
-#    Updated: 2017/08/19 13:39:39 by omeyer           ###   ########.fr        #
+#    Updated: 2017/08/27 17:28:44 by omeyer           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = lem-in
 
-SRC = file_handeling.c room_list.c graphs.c path_finder.c path_list.c \
-	  ant_list.c move_ants.c
+SRC = file_handeling.c room_list.c
 
-OBJ = file_handeling.o room_list.o graphs.o path_finder.o path_list.o \
-	  ant_list.o move_ants.o
+OBJ = file_handeling.o room_list.o 
 
-FLAGS = -Wall -Wextra -Werror -lmlx -framework OpenGL -framework AppKit
+FLAGS = -Wall -Wextra -Werror 
 
 FETCHLIB = -L libft/ -lft
 

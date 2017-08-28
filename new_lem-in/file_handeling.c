@@ -6,7 +6,7 @@
 /*   By: omeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/15 16:09:52 by omeyer            #+#    #+#             */
-/*   Updated: 2017/08/27 17:34:39 by omeyer           ###   ########.fr       */
+/*   Updated: 2017/08/28 08:25:34 by omeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,75 +38,22 @@ void	close_file(int	fd, char *filename)
 void		file_handling(char	*filename)
 {
 	t_node_r    *head;
-	int fd ;
+	int			fd;
+	int			handler;
+
+
 	fd = open_file(filename);
-	if (break_up(fd, &head) == 1)
+	handler = break_up(fd, &head);
+	if (handler == 0)
 	{
-		
+		display_top(filename);
 	}
+	else
+		errorr_display(handler);
+
 	close_file(fd, filename);
 }
 
-static void	create_room(char *line, t_check *check, t_node_r **head)
-{
-	t_data_r    temp_data;
-	char        **split;
-	static int	n = 1;
-
-	split = ft_strsplit(line, ' ');
-	temp_data.room = ft_atoi(split[0]);
-	temp_data.point.x = ft_atoi(split[1]);
-	temp_data.point.y = ft_atoi(split[2]);
-	if (check->start == 1)
-	{
-		temp_data.start = 1;
-		check->start = 0;
-	}
-	else
-		temp_data.start = 0;
-	if (check->end == 1)
-	{
-		temp_data.end = 1;
-		check->end = 0;
-	}
-	else
-		temp_data.end = 0;
-	push_back(temp_data, n, head);
-	n++;
-}
-
-t_check		checks(char *line, t_check check, t_node_r **head)
-{
-	if (!(ft_strchr(line, '#')) && !(ft_strchr(line, '-')) &&
-			(ft_strlen(line) != 1))
-	{
-		check.room++;
-		create_room(line, &check, head);
-	}
-	if (ft_strlen(line) == 1)
-		check.ants = ft_atoi(line);
-	if (ft_strcmp(line, "##start") == 0)
-		check.start = 1;
-	if (ft_strcmp(line, "##end") == 0)
-		check.end = 1;
-	return (check);
-}
-/*
-void			create_ants(int ants, t_node_a **head, t_graph *graph)
-{
-	int			i;
-	t_data_a	temp;
-
-	i = 1;
-	while (i <= ants)
-	{
-		temp.id = i;
-		temp.index = find_start(graph).id;
-		push_back_a(temp, i, head);
-		i++;
-	}
-}
-*/
 int	break_up(int fd, t_node_r **head)
 {
 	t_check		check;
@@ -121,35 +68,7 @@ int	break_up(int fd, t_node_r **head)
 		check =	checks(line, check, head);
 		free(line);
 	}
-	return((err_handling(*head, check.ants, check.room) == -1) ? -1 : 1);
-}
-
-int		err_handling(t_node_r *head, int ants, int rooms)
-{
-	t_node_r	*temp;
-	int			start;
-	int			end;
-
-	start = 0;
-	end = 0;
-	if (ants == 0)
-		ft_putendl("ERROR!\nThere are no ants to move.");
-	if (rooms == 0)
-		ft_putendl("ERROR!\nThere are no rooms to hold the ants.");
-	temp = head;
-	while (temp)
-	{
-		if (temp->data.start == 1)
-			start = 1;
-		if (temp->data.end == 1)
-			end = 1;
-		temp = temp->next;
-	}
-	if (start == 0)
-		ft_putendl("ERROR!\nThere is no starting point for ants.");
-	if (end == 0)
-		ft_putendl("ERROR!\nThere are no end point for ant to go to.");
-	return ((ants == 0 || rooms == 0 || start == 0 || end == 0) ? -1 : 1);
+	return (err_handling(*head, check.ants, check.room));
 }
 
 int		main(int argc, char **argv)

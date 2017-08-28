@@ -6,7 +6,7 @@
 /*   By: omeyer <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/15 15:36:20 by omeyer            #+#    #+#             */
-/*   Updated: 2017/08/27 17:34:23 by omeyer           ###   ########.fr       */
+/*   Updated: 2017/08/28 08:24:42 by omeyer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,9 @@ int     err_handling(t_node_r *head, int ants, int rooms);
 /*********************************/
 void	print_list(t_node_r *head);
 void    push_back(t_data_r data, int n, t_node_r **head);
+/************************************/
+void    create_room(char *line, t_check *check, t_node_r **head);
+/*********************************************************/
+void    errorr_display(int err_no);
+void    display_top(char *filename);
 #endif
